@@ -50,8 +50,9 @@ describe('feedbackService', () => {
             feedback: 'Great event',
         });
 
-        expect(mockTransaction.set).toHaveBeenCalled();
-        expect(mockTransaction.update).toHaveBeenCalled();
+        expect(mockTransaction.get).toHaveBeenCalledTimes(2); // feedback + club
+        expect(mockTransaction.set).toHaveBeenCalledTimes(2); // feedback + event
+        expect(mockTransaction.update).toHaveBeenCalledTimes(3); // club + user points + request
         expect(result).toEqual({ success: true });
     });
 
@@ -67,7 +68,9 @@ describe('feedbackService', () => {
             feedback: '',
         });
 
-        expect(mockTransaction.set).toHaveBeenCalled();
+        expect(mockTransaction.get).toHaveBeenCalledTimes(1); // feedback only
+        expect(mockTransaction.set).toHaveBeenCalledTimes(2); // feedback + event
+        expect(mockTransaction.update).toHaveBeenCalledTimes(1); // request only
         expect(result).toEqual({ success: true });
     });
 
@@ -87,7 +90,9 @@ describe('feedbackService', () => {
             feedback: 'Nice',
         });
 
-        expect(mockTransaction.set).toHaveBeenCalled(); // Should call set for club doc
+        expect(mockTransaction.get).toHaveBeenCalledTimes(2); // feedback + club
+        expect(mockTransaction.set).toHaveBeenCalledTimes(3); // feedback + event + club(reputation create)
+        expect(mockTransaction.update).toHaveBeenCalledTimes(2); // user points + request
     });
 
     test('throws error if transaction fails', async () => {
